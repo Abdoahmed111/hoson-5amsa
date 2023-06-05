@@ -1,6 +1,10 @@
+import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
 
 const Navbar = () => {
+  const session = useSession();
+  const isLoggedIn = !!session.data;
+
   return (
     <div className="container navbar mx-auto ">
       <div className="navbar-start">
@@ -71,22 +75,25 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end flex items-center justify-end gap-2">
-        <div className="dropdown-end dropdown">
-          <label tabIndex={0} className="btn-ghost btn-circle btn">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-focus">
-              <span className="text-xl">عع</span>
-            </div>
-          </label>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu rounded-box menu-sm mt-3 w-auto bg-base-100 p-2 shadow"
+        {isLoggedIn ? (
+          <button
+            onClick={async () => {
+              await signOut();
+            }}
+            className="btn-natural btn"
           >
-            <li>
-              <a>تسجيل الخروج</a>
-            </li>
-          </ul>
-        </div>
-        <a className="btn-primary btn">تسجيل الدخول</a>
+            تسجيل الخروج
+          </button>
+        ) : (
+          <button
+            onClick={async () => {
+              await signIn();
+            }}
+            className="btn-primary btn"
+          >
+            تسجيل الدخول
+          </button>
+        )}
       </div>
     </div>
   );
